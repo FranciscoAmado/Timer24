@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity{
 
         numpadFragment = new NumpadFragment();
 
-        fragmentTransaction.replace(R.id.fragment_container, opFragment).commit();
+        fragmentTransaction.replace(R.id.fragment_container, opFragment).addToBackStack(null).commit();
     }
 
 

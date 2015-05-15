@@ -201,6 +201,7 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     public void onClick_numpad(View v){
 //        TableRow row = (TableRow)this.findViewById(R.id.first_button_row);
 //        row.removeAllViews();
+        getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new NumpadFragment()).commit();
     }
 
     public class MyCountDownTimer extends CountDownTimer {
