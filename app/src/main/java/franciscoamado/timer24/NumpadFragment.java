@@ -1,9 +1,11 @@
 package franciscoamado.timer24;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 
 /**
@@ -37,7 +41,9 @@ public class NumpadFragment extends Fragment implements OnClickListener {
     private View myFragmentView;
 
     private TextView second_timer;
-    private Double temp_timer;
+    private long temp_timer;
+    private long temp_timer_decimal;
+    private boolean decimal;
 
     private Button button_zero;
     private Button button_one;
@@ -84,6 +90,10 @@ public class NumpadFragment extends Fragment implements OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        temp_timer = 0;
+        decimal = false;
+        temp_timer_decimal = 000;
 
 
     }
@@ -178,8 +188,9 @@ public class NumpadFragment extends Fragment implements OnClickListener {
     * Sends secondtimer content to the first timer in the previous OpFragment
     * */
     public void onClick_Enter(){
-        MainActivity myActivity = (MainActivity)getActivity();
-        myActivity.countDownTimer.onTick(2000);
+        MainActivity myActivity = (MainActivity) getActivity();
+        myActivity.countDownTimer.onTick(convertToFull(temp_timer, temp_timer_decimal));
+        myActivity.onBackPressed();
     }
 
     /*
@@ -187,55 +198,74 @@ public class NumpadFragment extends Fragment implements OnClickListener {
     * */
     public void onClick_EraseTimer(){
         second_timer.setText("00");
+        temp_timer = 0;
+        temp_timer_decimal = 0;
     }
 
     /*
     * Adds a number or dot to the second timer based on the view that is clicked
     * */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void onClick_addTimer(View v){
         String auxText = second_timer.getText().toString();
         if(auxText.compareToIgnoreCase("EDIT")==0 || auxText.compareTo("00")==0 ){
             auxText = "";
         }
-        if(auxText.length() <= "100".length()){
             switch (v.getId()) {
                 case R.id.num_zero:
-                    second_timer.setText(auxText + 0);
+                    addNum(0);
                     break;
                 case R.id.num_one:
-                    second_timer.setText(auxText + 1);
+                    addNum(1);
                     break;
                 case R.id.num_two:
-                    second_timer.setText(auxText + 2);
+                    addNum(2);
                     break;
                 case R.id.num_three:
-                    second_timer.setText(auxText + 3);
+                    addNum(3);
                     break;
                 case R.id.num_four:
-                    second_timer.setText(auxText + 4);
+                    addNum(4);
                     break;
                 case R.id.num_five:
-                    second_timer.setText(auxText + 5);
+                    addNum(5);
                     break;
                 case R.id.num_six:
-                    second_timer.setText(auxText + 6);
+                    addNum(6);
                     break;
                 case R.id.num_seven:
-                    second_timer.setText(auxText + 7);
+                    addNum(7);
                     break;
                 case R.id.num_eight:
-                    second_timer.setText(auxText + 8);
+                    addNum(8);
                     break;
                 case R.id.num_nine:
-                    second_timer.setText(auxText + 9);
+                    addNum(9);
                     break;
                 case R.id.num_dot:
-                    if(!auxText.contains(".")) {
-                        second_timer.setText(auxText + ".");
-                    }
+                    decimal = true;
                     break;
             }
+            second_timer.setText(Objects.toString(temp_timer, null) + "." + Objects.toString(temp_timer_decimal, null));
+    }
+
+    private void addNum(int num){
+        long aux_timer;
+        if(!decimal && temp_timer < 10) {
+            aux_timer = temp_timer;
+            temp_timer = aux_timer * 10;
+            temp_timer += num;
+        } else {
+            if (temp_timer_decimal < 99) {
+                aux_timer = temp_timer_decimal;
+                temp_timer_decimal = aux_timer * 10;
+                temp_timer_decimal += num;
+            }
         }
+    }
+
+    private long convertToFull(long intTemp, long decTemp){
+        return (intTemp * 1000) + decTemp;
     }
 
 

@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity{
     public OptionsFragment opFragment;
     public NumpadFragment numpadFragment;
 
-    public static MyCountDownTimer countDownTimer;
+    public MyCountDownTimer countDownTimer;
     public long millisRemaining;
     private long timeElapsed;
     public boolean timerHasStarted = false;
@@ -64,6 +64,7 @@ public class MainActivity extends ActionBarActivity{
         }
 
         countDownTimer = new MyCountDownTimer(24000, 1);
+        text = (TextView) findViewById(R.id.timer);
 
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -99,8 +100,8 @@ public class MainActivity extends ActionBarActivity{
     public void onBackPressed() {
         if(fragmentManager.getBackStackEntryCount() == 1){
             fragmentManager.popBackStack();
-            fragmentTransaction = fragmentManager.beginTransaction();
 
+            fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.fragment_container, new OptionsFragment());
             fragmentTransaction.commit();
         } else{

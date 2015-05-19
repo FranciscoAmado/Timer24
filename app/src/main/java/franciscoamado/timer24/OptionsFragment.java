@@ -207,7 +207,7 @@ public class OptionsFragment extends Fragment implements OnClickListener{
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
 
-        fragmentTransaction.addToBackStack("ola");
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.add(R.id.fragment_container, new NumpadFragment());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
