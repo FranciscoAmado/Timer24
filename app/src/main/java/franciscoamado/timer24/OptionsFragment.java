@@ -1,6 +1,7 @@
 package franciscoamado.timer24;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -35,7 +36,7 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     private String mParam1;
     private String mParam2;
 
-    private MyCountDownTimer countDownTimer;
+    public static MyCountDownTimer countDownTimer;
     public long millisRemaining;
     private long timeElapsed;
     public boolean timerHasStarted = false;
@@ -201,7 +202,15 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     public void onClick_numpad(View v){
 //        TableRow row = (TableRow)this.findViewById(R.id.first_button_row);
 //        row.removeAllViews();
-        getActivity().getFragmentManager().beginTransaction().replace(R.id.fragment_container, new NumpadFragment()).commit();
+
+        countDownTimer.cancel();
+
+        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+
+        fragmentTransaction.addToBackStack("ola");
+        fragmentTransaction.add(R.id.fragment_container, new NumpadFragment());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 
     public class MyCountDownTimer extends CountDownTimer {

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +33,19 @@ import android.app.FragmentTransaction;
 
 public class MainActivity extends ActionBarActivity{
 
+
     public FragmentManager fragmentManager;
     public FragmentTransaction fragmentTransaction;
     public OptionsFragment opFragment;
     public NumpadFragment numpadFragment;
+
+    public static MyCountDownTimer countDownTimer;
+    public long millisRemaining;
+    private long timeElapsed;
+    public boolean timerHasStarted = false;
+    private TextView text;
+    private final long startTime = 24 * 1000;
+    private final long interval = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +63,13 @@ public class MainActivity extends ActionBarActivity{
             return;
         }
 
+        countDownTimer = new MyCountDownTimer(24000, 1);
+
         fragmentManager = getFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
 
-        opFragment = new OptionsFragment();
-
-        numpadFragment = new NumpadFragment();
-
-        fragmentTransaction.replace(R.id.fragment_container, opFragment).addToBackStack(null).commit();
+        fragmentTransaction.add(R.id.fragment_container, new OptionsFragment());
+        fragmentTransaction.commit();
     }
 
 
@@ -84,5 +93,39 @@ public class MainActivity extends ActionBarActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(fragmentManager.getBackStackEntryCount() == 1){
+            fragmentManager.popBackStack();
+            fragmentTransaction = fragmentManager.beginTransaction();
+
+            fragmentTransaction.add(R.id.fragment_container, new OptionsFragment());
+            fragmentTransaction.commit();
+        } else{
+            super.onBackPressed();
+        }
+    }
+
+    public class MyCountDownTimer extends CountDownTimer {
+        public MyCountDownTimer(long startTime, long interval) { super(startTime, interval);}
+
+        @Override
+        public void onFinish() {
+            text.setText("Time's up!");
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            millisRemaining = millisUntilFinished;
+            long sec = millisUntilFinished / 1000;
+            long msec = millisUntilFinished % 1000;
+            text.setText(Long.toString(sec) + "." + Long.toString(msec));
+        }
+
+        public void editTime(long time){
+
+        }
     }
 }

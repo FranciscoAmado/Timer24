@@ -1,6 +1,8 @@
 package franciscoamado.timer24;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -173,10 +175,11 @@ public class NumpadFragment extends Fragment implements OnClickListener {
 
     /*
     * NOT DEVELOPED
-    * Sends secondtimer content to the first timer
+    * Sends secondtimer content to the first timer in the previous OpFragment
     * */
     public void onClick_Enter(){
-
+        MainActivity myActivity = (MainActivity)getActivity();
+        myActivity.countDownTimer.onTick(2000);
     }
 
     /*
@@ -235,7 +238,6 @@ public class NumpadFragment extends Fragment implements OnClickListener {
         }
     }
 
-    
 
     /**
      * This interface must be implemented by activities that contain this
@@ -251,5 +253,4 @@ public class NumpadFragment extends Fragment implements OnClickListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
 }
