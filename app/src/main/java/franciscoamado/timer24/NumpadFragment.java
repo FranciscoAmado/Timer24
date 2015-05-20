@@ -39,6 +39,7 @@ public class NumpadFragment extends Fragment implements OnClickListener {
     private String mParam2;
 
     private View myFragmentView;
+    private MainActivity myActivity;
 
     private TextView second_timer;
     private long temp_timer;
@@ -94,6 +95,7 @@ public class NumpadFragment extends Fragment implements OnClickListener {
         temp_timer = 0;
         decimal = false;
         temp_timer_decimal = 000;
+        myActivity = (MainActivity) getActivity();
 
 
     }
@@ -188,8 +190,8 @@ public class NumpadFragment extends Fragment implements OnClickListener {
     * Sends secondtimer content to the first timer in the previous OpFragment
     * */
     public void onClick_Enter(){
-        MainActivity myActivity = (MainActivity) getActivity();
-        myActivity.countDownTimer.onTick(convertToFull(temp_timer, temp_timer_decimal));
+
+        myActivity.editTime(convertToFull(temp_timer, temp_timer_decimal));
         myActivity.onBackPressed();
     }
 

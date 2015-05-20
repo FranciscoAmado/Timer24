@@ -50,6 +50,7 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     private Button btn_reset_24;
 
     private OptionsListener mListener;
+    private MainActivity myActivity;
 
     /**
      * Use this factory method to create a new instance of
@@ -87,6 +88,8 @@ public class OptionsFragment extends Fragment implements OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         myFragmentView =  inflater.inflate(R.layout.fragment_options, container, false);
+
+        myActivity = (MainActivity) getActivity();
 
         btn_reset_14 = (Button) myFragmentView.findViewById(R.id.btn_reset_14);
         btn_reset_14.setOnClickListener(this);
@@ -156,54 +159,38 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     }
     public void onClick_Start_Stop(View v)
     {
-        if (!timerHasStarted)
+        if (!myActivity.timerHasStarted)
         {
-            if(millisRemaining != 0){
-                countDownTimer = new MyCountDownTimer(millisRemaining, interval);
-            }
-            countDownTimer.start();
             timerHasStarted = true;
             btn_start_stop.setText("STOP");
         }
         else
         {
-            countDownTimer.cancel();
             timerHasStarted = false;
             btn_start_stop.setText("START");
         }
+        myActivity.start_Stop();
     }
 
     public void onClick_reset_24(View v){
-        if(!timerHasStarted){
-            countDownTimer = new MyCountDownTimer(startTime, interval);
-            countDownTimer.onTick(24000);
-        } else {
-            countDownTimer.cancel();
-            countDownTimer = new MyCountDownTimer(startTime, interval);
+        if(myActivity.timerHasStarted){
             timerHasStarted = true;
-            countDownTimer.start();
             btn_start_stop.setText("STOP");
         }
+        myActivity.reset_24();
     }
 
     public void onClick_reset_14(View v){
-        if(!timerHasStarted){
-            countDownTimer = new MyCountDownTimer(startTime, interval);
-            countDownTimer.onTick(14000);
-        } else {
-            countDownTimer.cancel();
-            countDownTimer = new MyCountDownTimer(14000, interval);
+        if(myActivity.timerHasStarted){
             timerHasStarted = true;
-            countDownTimer.start();
             btn_start_stop.setText("STOP");
         }
+        myActivity.reset_14();
     }
 
     public void onClick_numpad(View v){
-//        TableRow row = (TableRow)this.findViewById(R.id.first_button_row);
-//        row.removeAllViews();
 
-        countDownTimer.cancel();
+        myActivity.countDownTimer.cancel();
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
 

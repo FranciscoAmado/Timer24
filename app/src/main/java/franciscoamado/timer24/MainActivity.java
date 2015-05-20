@@ -31,13 +31,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity implements OnClickListener{
 
 
     public FragmentManager fragmentManager;
     public FragmentTransaction fragmentTransaction;
     public OptionsFragment opFragment;
     public NumpadFragment numpadFragment;
+    private TextView timerText;
 
     public MyCountDownTimer countDownTimer;
     public long millisRemaining;
@@ -62,6 +63,9 @@ public class MainActivity extends ActionBarActivity{
         if (savedInstanceState != null) {
             return;
         }
+
+        timerText = (TextView)findViewById(R.id.timer);
+        timerText.setOnClickListener(this);
 
         countDownTimer = new MyCountDownTimer(24000, 1);
         text = (TextView) findViewById(R.id.timer);
@@ -109,6 +113,59 @@ public class MainActivity extends ActionBarActivity{
         }
     }
 
+    public void start_Stop()
+    {
+        if (!timerHasStarted)
+        {
+            if(millisRemaining != 0){
+                countDownTimer = new MyCountDownTimer(millisRemaining, interval);
+            }
+            countDownTimer.start();
+            timerHasStarted = true;
+        }
+        else
+        {
+            countDownTimer.cancel();
+            timerHasStarted = false;
+        }
+    }
+
+    public void reset_24(){
+        if(!timerHasStarted){
+            countDownTimer = new MyCountDownTimer(startTime, interval);
+            countDownTimer.onTick(24000);
+        } else {
+            countDownTimer.cancel();
+            countDownTimer = new MyCountDownTimer(startTime, interval);
+            timerHasStarted = true;
+            countDownTimer.start();
+        }
+    }
+
+    public void reset_14(){
+        if(!timerHasStarted){
+            countDownTimer = new MyCountDownTimer(startTime, interval);
+            countDownTimer.onTick(14000);
+        } else {
+            countDownTimer.cancel();
+            countDownTimer = new MyCountDownTimer(14000, interval);
+            timerHasStarted = true;
+            countDownTimer.start();
+        }
+    }
+
+    public void editTime(long newTime){
+        countDownTimer = new MyCountDownTimer(newTime, interval);
+        countDownTimer.onTick(newTime);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.timer){
+            start_Stop();
+        }
+    }
+
     public class MyCountDownTimer extends CountDownTimer {
         public MyCountDownTimer(long startTime, long interval) { super(startTime, interval);}
 
@@ -123,10 +180,6 @@ public class MainActivity extends ActionBarActivity{
             long sec = millisUntilFinished / 1000;
             long msec = millisUntilFinished % 1000;
             text.setText(Long.toString(sec) + "." + Long.toString(msec));
-        }
-
-        public void editTime(long time){
-
         }
     }
 }
