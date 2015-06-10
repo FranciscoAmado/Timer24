@@ -36,7 +36,6 @@ public class OptionsFragment extends Fragment implements OnClickListener{
     private String mParam1;
     private String mParam2;
 
-    public static MyCountDownTimer countDownTimer;
     public long millisRemaining;
     private long timeElapsed;
     public boolean timerHasStarted = false;
@@ -79,7 +78,6 @@ public class OptionsFragment extends Fragment implements OnClickListener{
         super.onCreate(savedInstanceState);
 
         text = (TextView) getActivity().findViewById(R.id.timer);
-        countDownTimer = new MyCountDownTimer(startTime, interval);
 //      text.setText(text.getText() + String.valueOf(startTime));
     }
 
@@ -190,7 +188,9 @@ public class OptionsFragment extends Fragment implements OnClickListener{
 
     public void onClick_numpad(View v){
 
-        myActivity.countDownTimer.cancel();
+        if(myActivity.timerHasStarted){
+            myActivity.countDownTimer.cancel();
+        }
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
 
@@ -198,22 +198,5 @@ public class OptionsFragment extends Fragment implements OnClickListener{
         fragmentTransaction.add(R.id.fragment_container, new NumpadFragment());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
-    }
-
-    public class MyCountDownTimer extends CountDownTimer {
-        public MyCountDownTimer(long startTime, long interval) { super(startTime, interval);}
-
-        @Override
-        public void onFinish() {
-            text.setText("Time's up!");
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            millisRemaining = millisUntilFinished;
-            long sec = millisUntilFinished / 1000;
-            long msec = millisUntilFinished % 1000;
-            text.setText(Long.toString(sec) + "." + Long.toString(msec));
-        }
     }
 }

@@ -3,6 +3,9 @@ package franciscoamado.timer24;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -171,6 +174,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener{
 
         @Override
         public void onFinish() {
+            Vibrator vb = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vb.vibrate(2500);
             text.setText("Time's up!");
         }
 
